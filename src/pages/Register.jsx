@@ -3,10 +3,18 @@ import { useNavigate } from "react-router-dom";
 
 export default function Register() {
   const navigate = useNavigate();
-  const [form, setForm] = useState({ name: "", email: "", phone: "", service: "" });
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    service: "",
+    aadhar: "",
+    llNumber: "",
+  });
   const [errors, setErrors] = useState({});
 
-  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  const handleChange = (e) =>
+    setForm({ ...form, [e.target.name]: e.target.value });
 
   const validate = () => {
     const newErrors = {};
@@ -14,6 +22,8 @@ export default function Register() {
     if (!form.email) newErrors.email = "Email is required";
     if (!form.phone) newErrors.phone = "Phone is required";
     if (!form.service) newErrors.service = "Please select a service";
+    if (!form.aadhar) newErrors.aadhar = "Aadhar number is required";
+    if (!form.llNumber) newErrors.llNumber = "LL Application number is required";
     return newErrors;
   };
 
@@ -31,7 +41,9 @@ export default function Register() {
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-        <h2 className="text-2xl font-bold mb-6 text-center text-blue-600">User Registration</h2>
+        <h2 className="text-2xl font-bold mb-6 text-center text-blue-600">
+          User Registration
+        </h2>
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <input
             name="name"
@@ -57,6 +69,24 @@ export default function Register() {
           />
           {errors.phone && <p className="text-red-500 text-sm">{errors.phone}</p>}
 
+          <input
+            name="aadhar"
+            placeholder="Aadhar Number"
+            onChange={handleChange}
+            className="border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+          />
+          {errors.aadhar && <p className="text-red-500 text-sm">{errors.aadhar}</p>}
+
+          <input
+            name="llNumber"
+            placeholder="LL Application Number"
+            onChange={handleChange}
+            className="border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+          />
+          {errors.llNumber && (
+            <p className="text-red-500 text-sm">{errors.llNumber}</p>
+          )}
+
           <select
             name="service"
             onChange={handleChange}
@@ -66,7 +96,9 @@ export default function Register() {
             <option value="license">License</option>
             <option value="registration">Vehicle Registration</option>
           </select>
-          {errors.service && <p className="text-red-500 text-sm">{errors.service}</p>}
+          {errors.service && (
+            <p className="text-red-500 text-sm">{errors.service}</p>
+          )}
 
           <button
             type="submit"

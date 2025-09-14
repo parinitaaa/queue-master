@@ -15,6 +15,7 @@ export default function Register() {
     otherService: "",
     aadhar: "",
     llNumber: "",
+    password: "", // added password
   });
 
   const [errors, setErrors] = useState({});
@@ -27,28 +28,23 @@ export default function Register() {
     if (!form.name) newErrors.name = "Name is required";
     if (!form.disabilities) newErrors.disabilities = "Please select disability";
     if (!form.phone) newErrors.phone = "Phone is required";
-    if (!form.serviceCategory) newErrors.serviceCategory = "Please select a service category";
     if (!form.aadhar) newErrors.aadhar = "Aadhar number is required";
     if (!form.llNumber) newErrors.llNumber = "LL Application number is required";
+    if (!form.password) newErrors.password = "Password is required"; // validate password
+    if (!form.serviceCategory) newErrors.serviceCategory = "Please select a service category";
     return newErrors;
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const validationErrors = validate();
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-    } else {
-      try {
-        const response = await axios.post("http://localhost:3000/users", form);
-        console.log("User registered:", response.data);
-        navigate("/book");
-      } catch (error) {
-        console.error("Registration error:", error);
-        // Optionally set error state here to display error message to user
-      }
-    }
-  };
+ const handleSubmit = (e) => {
+  e.preventDefault();
+  const validationErrors = validate();
+  if (Object.keys(validationErrors).length > 0) {
+    setErrors(validationErrors);
+  } else {
+    // temporarily skip API call
+    navigate("/login");
+  }
+};
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -90,6 +86,15 @@ export default function Register() {
           {errors.phone && <p className="text-red-500 text-sm">{errors.phone}</p>}
 
           <input
+            name="password"
+            type="password"
+            placeholder="Password"
+            onChange={handleChange}
+            className="border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+          />
+          {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
+
+          <input
             name="aadhar"
             placeholder="Aadhar Number"
             onChange={handleChange}
@@ -123,6 +128,7 @@ export default function Register() {
             <p className="text-red-500 text-sm">{errors.serviceCategory}</p>
           )}
 
+          {/* Optional dynamic dropdowns for service categories */}
           {form.serviceCategory === "drivingLicense" && (
             <select
               name="llType"
